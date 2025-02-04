@@ -19,7 +19,7 @@ HTML dosyaları, web sayfalarının temel yapı taşlarıdır ve çeşitli alanl
 1. Bu projeyi klonlayın veya indirin:
 
    ```sh
-   git clone https://github.com/kullaniciadi/html_to_pdf_converter.git
+   git clone https://github.com/phokai/html_to_pdf.git
    cd html_to_pdf_converter
    ```
 
