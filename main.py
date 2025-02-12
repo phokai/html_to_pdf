@@ -3,6 +3,7 @@ from tkinter import filedialog, messagebox
 import asyncio
 from pyppeteer import launch
 import os
+from bs4 import BeautifulSoup
 
 class HTMLToPDFConverter:
     def __init__(self, root):
@@ -42,12 +43,18 @@ class HTMLToPDFConverter:
     async def convert_files(self):
         browser = await launch()
         for html_file in self.html_files:
-            output_file = os.path.join(self.output_dir, os.path.basename(html_file).replace('.html', '.pdf'))
+            with open(html_file, 'r', encoding='utf-8') as file:
+                soup = BeautifulSoup(file, 'html.parser')
+                gib_tag = soup.find('td', text=lambda x: x and x.startswith('GIB'))
+                if gib_tag:
+                    name = gib_tag.get_text().strip()
+                else:
+                    name = os.path.basename(html_file).replace('.html', '')
+            output_file = os.path.join(self.output_dir, f'{name}.pdf')
             page = await browser.newPage()
             await page.goto(f'file://{html_file}')
             await page.pdf({'path': output_file})
         await browser.close()
-
         messagebox.showinfo("Dönüştürme Tamamlandı", "Tüm dosyalar PDF'ye dönüştürüldü.")
 
 if __name__ == "__main__":
